@@ -16,3 +16,14 @@ Before public launch:
 No live deployment, CMS authentication or transactional delivery has been performed without account credentials. The repository is an implemented foundation with the listed production prerequisites, not a claim of completed external service setup.
 
 Search rollout: use the canonical www host already served by the domain, set SITE_INDEXING_ENABLED=true in production and false on previews, and follow SEO-AUDIT.md. The Sites demonstration remains noindex.
+
+## Resend enquiry setup
+
+Contact, consultation and quotation forms share the server-only `/api/enquiry` handler. It validates submissions, rejects cross-origin requests, filters a honeypot, and sends plain-text email with the visitor's email as Reply-To. Success requires Resend to return a message ID; provider acceptance does not guarantee inbox delivery.
+
+1. Verify `vrksolutions.in` in https://resend.com/domains by adding the DNS records Resend provides. The setup test on 2026-11-14 was rejected because this domain was not verified.
+2. In your Next.js hosting project's server environment, set `RESEND_API_KEY`, `ENQUIRY_FROM=VRK Solutions <website@vrksolutions.in>` and `ENQUIRY_TO=info@vrksolutions.in`. Use the host's secret settings, never source code or NEXT_PUBLIC variables. Redeploy after setting them.
+3. Submit each form and check Resend delivery events and the company mailbox, including spam. Reply to an enquiry to verify Reply-To.
+4. Configure host-level rate limiting for `/api/enquiry` before exposing email delivery publicly.
+
+The separate static Sites preview does not run this API. Deploy the full Next.js application for working server-side email. The supplied key is configured in the local ignored `.env.local` only; hosting credentials were not available to configure a remote host. Rotate any API key shared in chat before production use.

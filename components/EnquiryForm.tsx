@@ -30,7 +30,11 @@ export default function EnquiryForm({
         body: JSON.stringify(data),
       });
       const result = await r.json();
-      setStatus(result.message);
+      setStatus(
+        typeof result.message === 'string'
+          ? result.message
+          : 'Unable to send right now. Please email info@vrksolutions.in.',
+      );
     } catch {
       setStatus(
         'Unable to send right now. Please email info@vrksolutions.in or contact us on WhatsApp.',

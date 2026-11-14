@@ -45,15 +45,15 @@ export async function POST(request: Request) {
     const d = parsed.data;
     const result = await new Resend(process.env.RESEND_API_KEY).emails.send({
       from: process.env.ENQUIRY_FROM,
-      to: 'info@vrksolutions.in',
+      to: process.env.ENQUIRY_TO || 'info@vrksolutions.in',
       replyTo: d.email,
-      subject: `Website ${d.kind} enquiry`,
+      subject: `VRK Solutions: ${d.kind === 'book-consultation' ? 'Consultation request' : d.kind === 'get-quote' || d.kind === 'quote' ? 'Quotation request' : 'Contact enquiry'}`,
       text: Object.entries(d)
         .filter(([k]) => !['website', 'consent'].includes(k))
         .map(([k, v]) => `${k}: ${v}`)
         .join('\n\n'),
     });
-    if (result.error) throw new Error('Delivery failed');
+    if (result.error || !result.data?.id) throw new Error('Delivery failed');
     return NextResponse.json({
       message: 'Thank you. Your enquiry has been sent to VRK Solutions.',
     });
