@@ -100,7 +100,7 @@ export default async function Detail({
             url: canonicalUrl('/about'),
           },
           publisher: { '@id': orgId },
-          image: p?.cover?.url || canonicalUrl('/brand/social.png'),
+          image: p?.cover?.url || canonicalUrl('/brand/hero-background.jpg'),
           ...(published ? { datePublished: published } : {}),
           ...(modified ? { dateModified: modified } : {}),
         }}

@@ -26,6 +26,14 @@ describe('search indexing and canonical boundaries', () => {
     expect(meta.robots).toMatchObject({ index: false, follow: true });
     expect(meta.openGraph).toMatchObject({ url: canonicalUrl('/contact') });
   });
+  it('uses the supplied artwork for social previews with its actual dimensions', () => {
+    const meta = pageMetadata('Home', 'Description', '/');
+    expect(meta.openGraph).toMatchObject({ images: [{
+      url: site.url + '/brand/hero-background.jpg', width: 1448, height: 1086,
+      type: 'image/jpeg',
+    }] });
+    expect(meta.twitter).toMatchObject({ card: 'summary_large_image', images: [site.url + '/brand/hero-background.jpg'] });
+  });
   it('prevents Vercel preview indexing', () => {
     vi.stubEnv('SITE_INDEXING_ENABLED', 'true');
     vi.stubEnv('VERCEL_ENV', 'preview');

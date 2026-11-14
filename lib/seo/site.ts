@@ -27,7 +27,7 @@ export function pageMetadata(
   path: string,
   {
     noindex = false,
-    image = '/brand/social.png',
+    image = '/brand/hero-background.jpg',
     article = false,
   }: { noindex?: boolean; image?: string; article?: boolean } = {},
 ): Metadata {
@@ -50,9 +50,10 @@ export function pageMetadata(
       images: [
         {
           url: new URL(image, site.url).href,
-          width: 1200,
-          height: 630,
-          alt: 'VRK Solutions — We build. We scale. We dominate.',
+          ...(image === '/brand/hero-background.jpg'
+            ? { width: 1448, height: 1086, type: 'image/jpeg' }
+            : {}),
+          alt: 'VRK Solutions logo on cream architectural curves with an orange ribbon',
         },
       ],
     },
